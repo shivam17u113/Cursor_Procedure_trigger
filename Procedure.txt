@@ -1,0 +1,95 @@
+ PL/SQL Stored Procedure and Stored Function : Write a PL/SQL procedure
+ to find the number of students ranging 
+from 100-80%, 79-70%, 69-60%,59-50 & below 49% in each course from the S
+tudent_course table given by the procedure as parameter.  
+ Student_course(Roll_no,Course,Couse_code,Semester,Total_Marks,Percentage) 
+
+
+
+mysql> select * from student_course;
+ERROR 1146 (42S02): Table 'test2.student_course' doesn't exist
+mysql> select * from Student_course;
++---------+--------+-------------+----------+-------------+------------+
+| ROll_no | COurse | Course_code | Semester | Total_Marks | Percentage |
++---------+--------+-------------+----------+-------------+------------+
+|       1 | CN     | 17u11CN     |        5 |         100 |      92.78 |
+|       2 | CN     | 17u11CN     |        5 |         100 |      76.78 |
+|       3 | CN     | 17u11CN     |        5 |         100 |      82.54 |
+|       4 | CN     | 17u11CN     |        5 |         100 |      57.88 |
+|       5 | CN     | 17u11CN     |        5 |         100 |      72.98 |
+|       1 | DBMS   | 17u11DBMS   |        5 |         100 |      72.98 |
+|       2 | DBMS   | 17u11DBMS   |        5 |         100 |      65.98 |
+|       3 | DBMS   | 17u11DBMS   |        5 |         100 |      92.43 |
+|       4 | DBMS   | 17u11DBMS   |        5 |         100 |      82.10 |
+|       5 | DBMS   | 17u11DBMS   |        5 |         100 |      90.38 |
++---------+--------+-------------+----------+-------------+------------+
+10 rows in set (0.00 sec)
+
+mysql> describe Student_course;
++-------------+---------------+------+-----+---------+-------+
+| Field       | Type          | Null | Key | Default | Extra |
++-------------+---------------+------+-----+---------+-------+
+| ROll_no     | int(3)        | YES  |     | NULL    |       |
+| COurse      | varchar(10)   | YES  |     | NULL    |       |
+| Course_code | varchar(10)   | YES  |     | NULL    |       |
+| Semester    | int(3)        | YES  |     | NULL    |       |
+| Total_Marks | int(4)        | YES  |     | NULL    |       |
+| Percentage  | decimal(10,2) | YES  |     | NULL    |       |
++-------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql>
+
+
+
+
+
+
+create procedure s1(in crs varchar(255))
+begin
+
+declare first int(3) default 0;
+declare highsec int(3) default 0;
+declare secondary int(3) default 0;
+declare  destinction int(3) default 0;
+declare pass int(3) default 0;
+declare per int(3) default 0;
+declare finished int(3) default 0;
+
+declare r
+cursor for
+select Percentage from Student_course
+where COurse=crs;
+
+declare continue handler
+for not found set finished=1;
+
+open r;
+lp:loop
+fetch r into per;
+
+if finished=1 then leave lp;
+elseif per>80 and per<100 then set first:=first+1;
+elseif per>70 and per<79 then set highsec:=highsec+1;
+elseif per>60 and per<69 then  set secondary:=secondary+1;
+elseif per>50 and per<59 then set destinction:=destinction+1;
+elseif per<49 then set pass:=pass+1;
+end if;
+
+end loop lp;
+select first,highsec,secondary,destinction,pass;
+close r;
+end;
+//
+
+
+to call procedure
+
+call s1("TOC");
+
+
+
+
+
+
+

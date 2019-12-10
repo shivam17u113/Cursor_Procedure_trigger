@@ -1,0 +1,77 @@
+
+Write a PL/SQL code to implement all types of cursor 
+(Implicit,Explicit) and display employee number, 
+name and salary of 5highest paid employees
+using cursor.Employee(employee no, employee name, join_date, designation, salary). 
+
+
+mysql> describe employee3;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| no          | int(3)      | YES  |     | NULL    |       |
+| name        | varchar(10) | YES  |     | NULL    |       |
+| join_date   | date        | YES  |     | NULL    |       |
+| designation | varchar(10) | YES  |     | NULL    |       |
+| salary      | int(10)     | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select * from employee3;
++------+----------+------------+-------------+--------+
+| no   | name     | join_date  | designation | salary |
++------+----------+------------+-------------+--------+
+|    2 | ankita   | 2019-01-02 | manager     |  67000 |
+|    3 | shreyash | 2019-03-02 | clerk       | 200000 |
+|    4 | patil    | 2019-04-02 | HR          |  80000 |
+|    5 | spt      | 2019-05-02 | clerk       |  50000 |
+|    6 | game     | 2019-06-02 | manager     | 547000 |
+|   11 | pralhad  | NULL       | NULL        |   NULL |
+|   11 | pralhad  | NULL       | NULL        |   NULL |
+|   11 | pralhad  | NULL       | NULL        |   NULL |
++------+----------+------------+-------------+--------+
+8 rows in set (0.00 sec)
+
+mysql> 
+
+
+
+
+create table employee3(no int(3) , name varchar(10) , join_date date ,designation varchar(10),salary int(10));
+
+insert into employee3 values(2, 'sagar','2019-1-2','manager',67000);
+insert into employee3 values(3, 'shreyash','2019-3-2','clerk',200000);
+insert into employee3 values(4, 'nneell','2019-4-2','employee',80000);
+insert into employee3 values(5, 'nikhil','2019-5-2','clerk',50000);
+insert into employee3 values(6, 'sharda','2019-6-2','manager',547000);
+
+
+create procedure proc4()
+begin
+declare dname varchar(255);
+declare dno   int(3) default 0;
+declare dsalary int(10) default 0;
+declare finished int default 0;
+
+declare r
+cursor for
+select no ,name,salary from employee3;
+
+declare continue handler 
+for not found set finished=1;
+
+open r;
+lp:loop
+fetch r into dno,dname,dsalary;
+
+if finished =1 then leave lp;
+select dno,dname,dsalary;
+end if;
+
+end loop lp;
+close r;
+end;
+
+
+
+

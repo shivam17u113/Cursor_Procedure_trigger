@@ -1,0 +1,56 @@
+
+
+
+1.insert one document
+
+db.test.insert({"name":"shivam","roll":3})
+
+2.Insert multiple documents
+db.test.insert([{"name":"patil","roll":4},{"name":"akash","roll":6}])
+
+
+3.to ctreate collecton
+db.createCollection("collection_name")
+
+4. To use database
+use database_name
+
+5.TO Print all documents in collection
+db.collction_name.find().pretty()
+
+6. To update single document
+db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)
+
+db.test.update({"name":"shivam3"},{$set:{"div":"k"}});
+only change one filed from document
+
+7. to update multiple documents
+To update multiple documents, you need to set a parameter 'multi' to true
+db.test.update({"name":"patil"},{$set:{"div":"k"}},{multi:true})
+
+8. TO delete single document
+db.test.remove({"name":"shivam3"},1);
+here 1 indicate that remove one documets
+
+
+9. TO remove multiple documents 
+db.test.insert({"name":"shivam","roll":3})
+
+
+10. indexing in mongodb
+db.test.ensureIndex({"Grno":1});
+
+11. Aggregation in mongodb
+db.test.aggregate([{$group:{_id:"$div",result:{$sum:1}}}]);
+
+12. Map reduce
+var mapc=function(){emit(this.name,1)}
+var redc=function(key,value){return Array.sum(value)}
+db.test2.mapReduce(mapc,redc,{out:"result"}).find()
+
+
+
+
+
+
+

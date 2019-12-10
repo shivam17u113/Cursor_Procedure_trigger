@@ -1,0 +1,126 @@
+Database Trigger (Row level and Statement level triggers, Before and After Triggers)
+:Write a database trigger on Employee table. The System should keep track of the records that are
+ being updated or deleted. The old value of updated or deleted records should be added in to
+ a new table when the Employee table is updated.
+Employee(employee no, employee name, join_date, designation, salary). 
+
+
+
+
+mysql> describe employee3;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| no          | int(3)      | YES  |     | NULL    |       |
+| name        | varchar(10) | YES  |     | NULL    |       |
+| join_date   | date        | YES  |     | NULL    |       |
+| designation | varchar(10) | YES  |     | NULL    |       |
+| salary      | int(10)     | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select * from employee3;
++------+----------+------------+-------------+--------+
+| no   | name     | join_date  | designation | salary |
++------+----------+------------+-------------+--------+
+|    2 | ankita   | 2019-01-02 | manager     |  67000 |
+|    3 | shreyash | 2019-03-02 | clerk       | 200000 |
+|    4 | patil    | 2019-04-02 | HR          |  80000 |
+|    5 | spt      | 2019-05-02 | clerk       |  50000 |
+|    6 | game     | 2019-06-02 | manager     | 547000 |
+|   11 | pralhad  | NULL       | NULL        |   NULL |
+|   11 | pralhad  | NULL       | NULL        |   NULL |
+|   11 | pralhad  | NULL       | NULL        |   NULL |
++------+----------+------------+-------------+--------+
+8 rows in set (0.00 sec)
+
+mysql> 
+
+
+
+create table employee4 as select*from employee3;
+create table employee4_data as select*from employee3 where 1=2;
+
+alter table employee4_data
+modify column action varchar(255);
+
+// to drop triggers
+drop trigger update2
+
+
+//to show triggers
+ show triggers
+
+// used cmmands
+update employee4 set name='naman' where no=1;
+delete from employee4 where no=3;
+
+
+//  before update tigger
+create trigger update1
+before update 
+on
+employee4
+for each row
+begin
+
+insert into employee4_data set no=old.no,
+name=old.name,join_date=old.join_date,
+designation =old.designation,
+salary =old.salary,
+action='beforeUpdate';
+
+end;
+
+// after update tigger
+create trigger update2
+after update 
+on
+employee4
+for each row
+begin
+
+insert into employee4_data set no=old.no,
+name=old.name,join_date=old.join_date,
+designation =old.designation,
+salary =old.salary,
+action='afterUpdate';
+end;
+
+
+// after delete
+create trigger delete1
+after delete 
+on
+employee4
+for each row
+begin
+
+insert into employee4_data set no=old.no,
+name=old.name,join_date=old.join_date,
+designation =old.designation,
+salary =old.salary,
+action='afterdelete';
+
+end;
+
+
+// before delete
+create trigger delete2
+before delete 
+on
+employee4
+for each row
+begin
+
+insert into employee4_data set no=old.no,
+name=old.name,join_date=old.join_date,
+designation =old.designation,
+salary =old.salary,
+action='beforedelete';
+
+end;
+
+
+
+
